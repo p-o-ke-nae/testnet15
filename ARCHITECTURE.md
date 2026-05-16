@@ -15,7 +15,7 @@ PokenaeBaseSolution は、**ヘキサゴナル アーキテクチャ（ポーツ
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      WebApi 層                           │
-│   (PokenaeTemplate.Web)                                 │
+│   (TestNET15.Web)                                 │
 │   - Controllers (HTTP エンドポイント)                   │
 │   - Dependency Injection (DI) 設定                      │
 │   - Program.cs (アプリケーション構成)                  │
@@ -24,7 +24,7 @@ PokenaeBaseSolution は、**ヘキサゴナル アーキテクチャ（ポーツ
           ▼─────────────────────────┐
 ┌──────────────────────────────────────────────────────┐
 │         Application 層 (Use Case)                     │
-│   (PokenaeTemplate.Application)                      │
+│   (TestNET15.Application)                      │
 │   - Commands                   (変更操作)             │
 │   - Queries                    (読み取り操作)         │
 │   - Command/Query    Handlers  (オーケストレーション)│
@@ -37,7 +37,7 @@ PokenaeBaseSolution は、**ヘキサゴナル アーキテクチャ（ポーツ
         ▼────┴───────┐           ▼──┴────────────┐
 ┌──────────────────────────────────────────────┐
 │    Infrastructure 層                         │
-│    (PokenaeTemplate.Infrastructure)         │
+│    (TestNET15.Infrastructure)         │
 │    - DbContext (EFCore)                     │
 │    - Repositories (Port 実装)                │
 │    - Mappers (DB Model ↔ Entity 変換)       │
@@ -48,7 +48,7 @@ PokenaeBaseSolution は、**ヘキサゴナル アーキテクチャ（ポーツ
             ▼
 ┌──────────────────────────────────────────────┐
 │          Domain 層 (ビジネスロジック)         │
-│    (PokenaeTemplate.Domain)                 │
+│    (TestNET15.Domain)                 │
 │ ✓ フレームワーク非依存                      │
 │ ✓ エンティティ (ID, ビジネスルール)          │
 │ ✓ Port Interface (Repository など)         │
@@ -83,14 +83,14 @@ PokenaeBaseSolution は、**ヘキサゴナル アーキテクチャ（ポーツ
 **ファイル構成:**
 
 ```
-PokenaeTemplate.Domain/
+TestNET15.Domain/
 ├── Entities/
 │   └── WeatherForecast.cs         ← Domain Entity (ID 有、ビジネスルール)
 ├── Ports/
 │   └── IWeatherForecastRepository.cs  ← データアクセス抽象化
 ├── Exceptions/
 │   └── DomainException.cs         ← ドメイン固有の例外
-└── PokenaeTemplate.Domain.csproj
+└── TestNET15.Domain.csproj
 ```
 
 **重要な設計原則:**
@@ -115,7 +115,7 @@ PokenaeTemplate.Domain/
 **ファイル構成:**
 
 ```
-PokenaeTemplate.Application/
+TestNET15.Application/
 ├── UseCases/
 │   ├── Commands/
 │   │   ├── CreateWeatherForecastCommand.cs        ← コマンド定義
@@ -132,7 +132,7 @@ PokenaeTemplate.Application/
 │   └── CreateWeatherForecastCommandValidator.cs   ← FluentValidation
 ├── Mappers/
 │   └── WeatherForecastMapper.cs  ← Entity ↔ DTO 拡張メソッド
-└── PokenaeTemplate.Application.csproj
+└── TestNET15.Application.csproj
 ```
 
 **重要な設計原則:**
@@ -174,7 +174,7 @@ WeatherForecastResponseDto                  (API出力 = DB鏡合わせ)
 **ファイル構成:**
 
 ```
-PokenaeTemplate.Infrastructure/
+TestNET15.Infrastructure/
 ├── Data/
 │   ├── AppDbContext.cs               ← EFCore DbContext
 │   └── Models/
@@ -183,7 +183,7 @@ PokenaeTemplate.Infrastructure/
 │   └── WeatherForecastRepository.cs  ← IWeatherForecastRepository 実装
 ├── Mappers/
 │   └── PersistedWeatherForecastMapper.cs ← DB Model ↔ Entity 拡張メソッド
-└── PokenaeTemplate.Infrastructure.csproj
+└── TestNET15.Infrastructure.csproj
 ```
 
 **重要な設計原則:**
@@ -236,12 +236,12 @@ public static WeatherForecastResponseDto ToWeatherForecastResponseDto(this Weath
 **ファイル構成:**
 
 ```
-PokenaeTemplate.Web/
+TestNET15.Web/
 ├── Controllers/
 │   └── WeatherForecastController.cs  ← MediatR を使用して Command/Query 実行
 ├── Program.cs                        ← DI 設定およびミドルウェア構成
 ├── appsettings.json                  ← 接続文字列、認証設定
-└── PokenaeTemplate.Web.csproj         ← プロジェクト依存関係
+└── TestNET15.Web.csproj         ← プロジェクト依存関係
 ```
 
 **重要な設計原則:**
@@ -354,10 +354,10 @@ builder.Services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository
 ### 3.5 テスト（推奨）
 
 - Tests プロジェクトは対象プロジェクトごとにフォルダを分け、対象クラスが明確なテストは本体と同じ相対パスを再現します。
-- 配置ルールは `PokenaeTemplate.Tests/<TargetProject>/<相対パス>/<TargetClass>Tests.cs` を基本とし、共通補助クラスは `PokenaeTemplate.Tests/<TargetProject>/TestSupport/` に置きます。
+- 配置ルールは `TestNET15.Tests/<TargetProject>/<相対パス>/<TargetClass>Tests.cs` を基本とし、共通補助クラスは `TestNET15.Tests/<TargetProject>/TestSupport/` に置きます。
 
 ```text
-PokenaeTemplate.Tests/
+TestNET15.Tests/
 ├── Infrastructure/
 │   ├── Data/
 │   │   └── DesignTimeConnectionStringResolverTests.cs
@@ -654,7 +654,7 @@ docker compose -f docker-compose.dotnet8.yml -f docker-compose.dotnet8.prod.yml 
 
 | 問題                                          | 原因                    | 解決方法                                                            |
 | --------------------------------------------- | ----------------------- | ------------------------------------------------------------------- |
-| "AppDbContext が見つかりません"               | using 足りない          | `using PokenaeTemplate.Infrastructure.Data;` 追加                   |
+| "AppDbContext が見つかりません"               | using 足りない          | `using TestNET15.Infrastructure.Data;` 追加                   |
 | "IWeatherForecastRepository がない"           | DI 未登録               | `Program.cs` に `AddScoped<IWeatherForecastRepository, ...>()` 追加 |
 | "ToWeatherForecastResponseDto が見つからない" | Mapper using や実装なし | Mapper クラスを作成・using 確認                                     |
 | Migration エラー                              | EFCore ファイルシステム | `dotnet ef database update` 実行                                    |

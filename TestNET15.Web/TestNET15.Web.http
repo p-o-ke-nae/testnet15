@@ -1,0 +1,6 @@
+@TestNET15_HostAddress = http://localhost:5038
+
+GET {{TestNET15_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
